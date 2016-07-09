@@ -117,7 +117,7 @@ namespace Numboard
 
 			if (primaryOut != null)
 			{
-                var deviceMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(PrimaryOutputDevice).
+				var deviceMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(PrimaryOutputDevice).
 					Where(i => i.Value.Equals(primaryOut))
 					.FirstOrDefault();
 
@@ -132,7 +132,7 @@ namespace Numboard
 			}
 
 			var secondaryOut = ProgramState.Instance.SecondaryOutputDevice;
-            if (secondaryOut != null)
+			if (secondaryOut != null)
 			{
 				var deviceMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice)
 					.Where(i => i.Value.Equals(secondaryOut))
@@ -150,7 +150,7 @@ namespace Numboard
 
 
 			string lastFile = ProgramState.Instance.DefaultSaveFile;
-            if (lastFile != null)
+			if (lastFile != null)
 			{
 				if (!File.Exists(lastFile))
 				{
@@ -197,10 +197,12 @@ namespace Numboard
 
 			var selectedDevice = ((FrameworkElement)menuItem.Parent).Name;
 
-			if (selectedDevice == PrimaryOutputDevice.Name) {
+			if (selectedDevice == PrimaryOutputDevice.Name)
+			{
 				ProgramState.Instance.PrimaryOutputDevice = (int?)menuItem.Value;
 			}
-			else {
+			else
+			{
 				ProgramState.Instance.SecondaryOutputDevice = (int?)menuItem.Value;
 			}
 
@@ -218,7 +220,7 @@ namespace Numboard
 					stream.SecondaryReader.Volume = (float)Math.Log(1 + MasterVolume * SecondaryVolume * stream.ButtonVolumeWhenClicked);
 				}
 			}
-        }
+		}
 
 		private void FileList_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
@@ -235,6 +237,20 @@ namespace Numboard
 					return;
 				}
 				LoadFromPath(fileListItem.FilePath);
+			}
+		}
+
+		private void FileList_Drop(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				foreach (var file in files)
+				{
+					if (new FileInfo(file).Extension == ".nbs") {
+						AddFileToFileList(file);
+					}
+				}
 			}
 		}
 	}
