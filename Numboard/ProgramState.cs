@@ -19,7 +19,7 @@ namespace Numboard
 		public string DefaultSaveFile { get; set; }
 		public int? PrimaryOutputDevice { get; set; }
 		public int? SecondaryOutputDevice { get; set; }
-		public double MasterVolume { get; set; }
+		public double MasterVolume { get; set; } = 1;
 
 		public void Save()
 		{

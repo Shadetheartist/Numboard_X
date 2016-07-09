@@ -13,24 +13,25 @@ namespace Numboard
 		{
 			get
 			{
-				var valueMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(PrimaryOutputDevice)
+				var menuitems = Helpers.GetLogicalChildCollection<ValueMenuItem>(PrimaryOutputDevice);
+               
+				var valueMenuItem = menuitems
 					.Where(i => i.IsChecked == true)
 					.FirstOrDefault();
 
-				//if there is none checked, make the first one checked
+				//if there is none checked, make the first one chekced
 				if (valueMenuItem == null)
 				{
-					valueMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(PrimaryOutputDevice).FirstOrDefault();
+					valueMenuItem = menuitems.Where(i => (int)i.Value != -1).FirstOrDefault();
 
 					//if that fails, then there are no audio devices, we might want to throw an exception
 					if (valueMenuItem != null)
 					{
-						valueMenuItem.IsChecked = true;
+                        valueMenuItem.IsChecked = true;
 					}
 					else
 					{
-						//exception instead?
-						return 0;
+						return -1;
 					}
 				}
 
@@ -42,7 +43,9 @@ namespace Numboard
 		{
 			get
 			{
-				var valueMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice)
+				var stuf = Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice);
+                var valueMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice)
+					.Where(i => (int)i.Value != -1)
 					.Where(i => i.IsChecked == true)
 					.FirstOrDefault();
 
@@ -58,8 +61,7 @@ namespace Numboard
 					}
 					else
 					{
-						//exception instead?
-						return 0;
+						return -1;
 					}
 				}
 

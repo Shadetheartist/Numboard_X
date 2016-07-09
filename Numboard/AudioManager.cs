@@ -34,7 +34,7 @@ namespace Numboard
 			//primary ouput
 			var primaryReader = new AudioFileReader(button.Source);
 			primaryReader.Volume = (float)(volume * MasterVolume);
-			
+
 			var primaryWaveOut = new WaveOut();
 			primaryWaveOut.DeviceNumber = SelectedPrimaryOutputDevice;
 
@@ -49,21 +49,26 @@ namespace Numboard
 
 			try
 			{
-
+				//we always want to init so we dont have to deal with dispose in a weird way
 				primaryWaveOut.Init(primaryReader);
-				primaryWaveOut.Play();
+
+				//-1 = 'none'
+				if (SelectedPrimaryOutputDevice != -1)
+					primaryWaveOut.Play();
 
 				secondaryWaveOut.Init(secondaryReader);
 
 				//we don't want to play both to the same audio device, it creates a chorus effect
-				if (SelectedPrimaryOutputDevice != SelectedPrimaryOutputDevice)
+				if (SelectedPrimaryOutputDevice != SelectedSecondaryOutputDevice)
 				{
-					secondaryWaveOut.Play();
+					if (SelectedSecondaryOutputDevice != -1)
+						secondaryWaveOut.Play();
 				}
 
-				if (button.Volume == null) {
+				if (button.Volume == null)
+				{
 					button.Volume = 1;
-                }
+				}
 
 				PlayingStreams.Add(new PlayingStream { Button = button, ButtonVolumeWhenClicked = (double)button.Volume, PrimaryReader = primaryReader, SecondaryReader = secondaryReader, PrimaryWaveOut = primaryWaveOut, SecondaryWaveOut = secondaryWaveOut });
 

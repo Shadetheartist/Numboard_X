@@ -166,13 +166,54 @@ namespace Numboard
 			}
 		}
 
+		private void CheckInputDevices(object sender, MouseEventArgs e)
+		{
+			//-1 becuase of the 'None' item
+			if (PrimaryOutputDevice.Items.Count - 1 == WaveOut.DeviceCount)
+			{
+				return;
+			}
+
+			int primary = SelectedPrimaryOutputDevice;
+			int secondary = SelectedSecondaryOutputDevice;
+
+			PrimaryOutputDevice.Items.Clear();
+			SecondaryOutputDevice.Items.Clear();
+
+			InitializeInputDevices();
+
+			foreach (ValueMenuItem item in PrimaryOutputDevice.Items)
+			{
+				item.IsChecked = ((int)item.Value == primary);
+			}
+
+			foreach (ValueMenuItem item in SecondaryOutputDevice.Items)
+			{
+				item.IsChecked = ((int)item.Value == secondary);
+			}
+
+		}
 		private void InitializeInputDevices()
 		{
+			var tempValueMenuItem = new ValueMenuItem();
+			tempValueMenuItem.Header = "None";
+			tempValueMenuItem.Value = -1;
+			tempValueMenuItem.Click += SetDeviceId;
+			tempValueMenuItem.IsCheckable = true;
+			PrimaryOutputDevice.Items.Add(tempValueMenuItem);
+
+			tempValueMenuItem = new ValueMenuItem();
+			tempValueMenuItem.Header = "None";
+			tempValueMenuItem.Value = -1;
+			tempValueMenuItem.Click += SetDeviceId;
+			tempValueMenuItem.IsCheckable = true;
+			SecondaryOutputDevice.Items.Add(tempValueMenuItem);
+
 			for (int deviceNumber = 0; deviceNumber < WaveOut.DeviceCount; deviceNumber++)
 			{
 				var capabilities = WaveOut.GetCapabilities(deviceNumber);
 
-				var tempValueMenuItem = new ValueMenuItem();
+				tempValueMenuItem = new ValueMenuItem();
 				tempValueMenuItem.Header = capabilities.ProductName;
 				tempValueMenuItem.Value = deviceNumber;
 				tempValueMenuItem.Click += SetDeviceId;
@@ -186,6 +227,8 @@ namespace Numboard
 				tempValueMenuItem.IsCheckable = true;
 				SecondaryOutputDevice.Items.Add(tempValueMenuItem);
 			}
+
+			
 		}
 
 		private void SetDeviceId(object sender, RoutedEventArgs e)
@@ -207,7 +250,6 @@ namespace Numboard
 			}
 
 			ProgramState.Instance.Save();
-
 		}
 
 		private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -247,7 +289,8 @@ namespace Numboard
 				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 				foreach (var file in files)
 				{
-					if (new FileInfo(file).Extension == ".nbs") {
+					if (new FileInfo(file).Extension == ".nbs")
+					{
 						AddFileToFileList(file);
 					}
 				}

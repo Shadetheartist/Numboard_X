@@ -6,15 +6,15 @@
 		SizeToContent="WidthAndHeight">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Height="485" Width="420" >
 
-        <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Grid.ColumnSpan="2">
+        <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Grid.ColumnSpan="2" IsMainMenu="True">
             <MenuItem Header="File">
                 <MenuItem Header="New" Click="New"/>
                 <MenuItem Header="Open Save" Click="Load"/>
                 <MenuItem Header="Save" Click="Save"/>
                 <MenuItem Header="Save As" Click="SaveAs"/>
             </MenuItem>
-            <MenuItem Name="PrimaryOutputDevice" Header="Primary Output Device" Height="20"></MenuItem>
-            <MenuItem Name="SecondaryOutputDevice" Header="Secondary Output Device"></MenuItem>
+            <MenuItem Name="PrimaryOutputDevice" Header="Primary Output Device" MouseEnter="CheckInputDevices"/>
+            <MenuItem Name="SecondaryOutputDevice" Header="Secondary Output Device" MouseEnter="CheckInputDevices"></MenuItem>
         </Menu>
 
         <Grid HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="10,30,0,0" Grid.ColumnSpan="2" >
