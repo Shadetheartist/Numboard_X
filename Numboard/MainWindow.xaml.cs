@@ -48,8 +48,7 @@ namespace Numboard
 					item.Hotkey = key;
 					if (key != Keys.None)
 					{
-						var hotkey = new HotKey(0, key, this, item);
-						hotkey.HotKeyPressed += (k, sbb) =>
+						Action<HotKey, NumboardButton> action = (k, sbb) =>
 						{
 							if (key == StopAllKey)
 							{
@@ -64,6 +63,12 @@ namespace Numboard
 								StopStream(sbb);
 							}
 						};
+
+						var hotkey = new HotKey(ModifierKeys.None, key, this, item);
+						hotkey.HotKeyPressed += action;
+
+						hotkey = new HotKey(ModifierKeys.Control, key, this, item);
+						hotkey.HotKeyPressed += action;
 					}
 				}
 			};
@@ -228,7 +233,7 @@ namespace Numboard
 				SecondaryOutputDevice.Items.Add(tempValueMenuItem);
 			}
 
-			
+
 		}
 
 		private void SetDeviceId(object sender, RoutedEventArgs e)
