@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -18,11 +15,11 @@ namespace Numboard
 		{
 			if (depObj == null) return null;
 
-			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+			for (var i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
 			{
 				var child = VisualTreeHelper.GetChild(depObj, i);
 
-				var result = (child as T) ?? GetChildOfType<T>(child);
+				var result = child as T ?? GetChildOfType<T>(child);
 				if (result != null) return result;
 			}
 			return null;
@@ -30,19 +27,19 @@ namespace Numboard
 
 		public static List<T> GetLogicalChildCollection<T>(object parent) where T : DependencyObject
 		{
-			List<T> logicalCollection = new List<T>();
+			var logicalCollection = new List<T>();
 			GetLogicalChildCollection(parent as DependencyObject, logicalCollection);
 			return logicalCollection;
 		}
 
 		private static void GetLogicalChildCollection<T>(DependencyObject parent, List<T> logicalCollection) where T : DependencyObject
 		{
-			IEnumerable children = LogicalTreeHelper.GetChildren(parent);
-			foreach (object child in children)
+			var children = LogicalTreeHelper.GetChildren(parent);
+			foreach (var child in children)
 			{
 				if (child is DependencyObject)
 				{
-					DependencyObject depChild = child as DependencyObject;
+					var depChild = child as DependencyObject;
 					if (child is T)
 					{
 						logicalCollection.Add(child as T);
@@ -59,7 +56,7 @@ namespace Numboard
 
 		private static bool isValidFormat(string file, string[] validformats)
 		{
-			foreach (string format in validformats)
+			foreach (var format in validformats)
 			{
 				if (System.IO.Path.GetExtension(file).Equals(format, StringComparison.InvariantCultureIgnoreCase))
 				{
@@ -76,16 +73,13 @@ namespace Numboard
 			if (source == null || destination == null)
 				throw new Exception("Source or/and Destination Objects are null");
 			// Getting the Types of the objects
-			Type typeDest = destination.GetType();
-			Type typeSrc = source.GetType();
+			var typeDest = destination.GetType();
+			var typeSrc = source.GetType();
 			// Collect all the valid properties to map
 			var results = from srcProp in typeSrc.GetProperties()
 						  let targetProperty = typeDest.GetProperty(srcProp.Name)
 						  where srcProp.CanRead
-						  && targetProperty != null
-						  && (targetProperty.GetSetMethod(true) != null && !targetProperty.GetSetMethod(true).IsPrivate)
-						  && (targetProperty.GetSetMethod().Attributes & MethodAttributes.Static) == 0
-						  && targetProperty.PropertyType.IsAssignableFrom(srcProp.PropertyType)
+						        && targetProperty != null && targetProperty.GetSetMethod(true) != null && !targetProperty.GetSetMethod(true).IsPrivate && (targetProperty.GetSetMethod().Attributes & MethodAttributes.Static) == 0 && targetProperty.PropertyType.IsAssignableFrom(srcProp.PropertyType)
 						  select new { sourceProperty = srcProp, targetProperty = targetProperty };
 			//map the properties
 			foreach (var props in results)

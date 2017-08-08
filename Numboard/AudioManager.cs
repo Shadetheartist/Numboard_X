@@ -10,37 +10,35 @@ namespace Numboard
 {
 	public partial class MainWindow
 	{
-		List<PlayingStream> PlayingStreams;
+		private List<PlayingStream> PlayingStreams;
+		
 		public void Play(object sender, MouseButtonEventArgs e)
 		{
 			var button = (NumboardButton)sender;
-			if (button == null) return;
-			if (button.Source == null) return;
-
-			if (!File.Exists(button.Source))
+			
+			if (button?.Source == null)
 			{
-				MessageBox.Show("Cannot Find file '" + button.Source + "'");
 				return;
 			}
 
-			var fileType = System.IO.Path.GetExtension(button.Source);
-
-			var volume = button.Volume;
-			if (volume == null)
+			if (!File.Exists(button.Source))
 			{
-				volume = 1;
+				MessageBox.Show("Cannot Find file '" + button.Source + "'. It was probably moved or deleted.");
+				return;
 			}
+
+			var volume = button.Volume ?? 1;
 
 			//primary ouput
 			var primaryReader = new AudioFileReader(button.Source);
-			primaryReader.Volume = (float)(volume * MasterVolume);
+			primaryReader.Volume = (float)(volume * MasterVolume * PrimaryVolume);
 
 			var primaryWaveOut = new WaveOut();
 			primaryWaveOut.DeviceNumber = SelectedPrimaryOutputDevice;
 
 			//secondary ouput
 			var secondaryReader = new AudioFileReader(button.Source);
-			secondaryReader.Volume = (float)(volume * MasterVolume);
+			secondaryReader.Volume = (float)(volume * MasterVolume * SecondaryVolume);
 
 			var secondaryWaveOut = new WaveOut();
 			secondaryWaveOut.DeviceNumber = SelectedSecondaryOutputDevice;
@@ -105,7 +103,7 @@ namespace Numboard
 			PlayingStreams = new List<PlayingStream>();
 		}
 
-		void StopAllStreams(object sender, MouseButtonEventArgs e)
+		private void StopAllStreams(object sender, MouseButtonEventArgs e)
 		{
 			StopAllStreams();
 		}

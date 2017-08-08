@@ -1,107 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows.Input;
 
 namespace Numboard
 {
-	public partial class MainWindow
-	{
-		public int SelectedPrimaryOutputDevice
-		{
-			get
-			{
-				var menuitems = Helpers.GetLogicalChildCollection<ValueMenuItem>(PrimaryOutputDevice);
-               
-				var valueMenuItem = menuitems
-					.Where(i => i.IsChecked == true)
-					.FirstOrDefault();
+    public partial class MainWindow
+    {
+        public int SelectedPrimaryOutputDevice
+        {
+            get
+            {
+                var menuItems = Helpers.GetLogicalChildCollection<ValueMenuItem>(PrimaryOutputDevice);
 
-				//if there is none checked, make the first one chekced
-				if (valueMenuItem == null)
-				{
-					valueMenuItem = menuitems.Where(i => (int)i.Value != -1).FirstOrDefault();
+                var valueMenuItem = menuItems.FirstOrDefault(i => i.IsChecked);
 
-					//if that fails, then there are no audio devices, we might want to throw an exception
-					if (valueMenuItem != null)
-					{
-                        valueMenuItem.IsChecked = true;
-					}
-					else
-					{
-						return -1;
-					}
-				}
+                //if there is none checked, make the first one chekced
+                if (valueMenuItem != null)
+                {
+                    return (int) valueMenuItem.Value;
+                }
 
-				return (int)valueMenuItem.Value;
-			}
-		}
+                valueMenuItem = menuItems.FirstOrDefault(i => (int) i.Value != -1);
 
-		public int SelectedSecondaryOutputDevice
-		{
-			get
-			{
-				var stuf = Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice);
-                var valueMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice)
-					.Where(i => (int)i.Value != -1)
-					.Where(i => i.IsChecked == true)
-					.FirstOrDefault();
+                //if that fails, then there are no audio devices, we might want to throw an exception
+                if (valueMenuItem != null)
+                {
+                    valueMenuItem.IsChecked = true;
+                }
+                else
+                {
+                    return -1;
+                }
 
-				//if there is none checked, make the first one checked
-				if (valueMenuItem == null)
-				{
-					valueMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice).FirstOrDefault();
-
-					//if that fails, then there are no audio devices, we might want to throw an exception
-					if (valueMenuItem != null)
-					{
-						valueMenuItem.IsChecked = true;
-					}
-					else
-					{
-						return -1;
-					}
-				}
-
-				return (int)valueMenuItem.Value;
+                return (int) valueMenuItem.Value;
             }
-		}
+        }
 
-		public double MasterVolume
-		{
-			get { return MasterVolumeSlider.Value; }
-			set
-			{
-				MasterVolumeSlider.Value = value;
-			}
-		}
+        public int SelectedSecondaryOutputDevice
+        {
+            get
+            {
+                Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice);
+                var valueMenuItem = Helpers
+                    .GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice)
+                    .Where(i => (int) i.Value != -1)
+                    .FirstOrDefault(i => i.IsChecked);
 
-		public double PrimaryVolume
-		{
-			get { return PrimaryDeviceVolumeSlider.Value; }
-			set
-			{
-				PrimaryDeviceVolumeSlider.Value = value;
-			}
-		}
+                //if there is none checked, make the first one checked
+                if (valueMenuItem != null)
+                {
+                    return (int) valueMenuItem.Value;
+                }
 
-		public double SecondaryVolume
-		{
-			get { return SecondaryDeviceVolumeSlider.Value; }
-			set
-			{
-				SecondaryDeviceVolumeSlider.Value = value;
-			}
-		}
+                valueMenuItem = Helpers.GetLogicalChildCollection<ValueMenuItem>(SecondaryOutputDevice).FirstOrDefault();
 
-		public bool HaveChangesBeenMade { get; set; }
+                //if that fails, then there are no audio devices, we might want to throw an exception
+                if (valueMenuItem != null)
+                {
+                    valueMenuItem.IsChecked = true;
+                }
+                else
+                {
+                    return -1;
+                }
 
-		public string SaveFilePath { get; set; }
+                return (int) valueMenuItem.Value;
+            }
+        }
 
-		public Keys StopAllKey = Keys.Decimal;
+        public double MasterVolume
+        {
+            get => MasterVolumeSlider.Value;
+            set => MasterVolumeSlider.Value = value;
+        }
 
-		public Key StopSingleKey = Key.NumPad0;
-	}
+        public double PrimaryVolume
+        {
+            get => PrimaryDeviceVolumeSlider.Value;
+            set => PrimaryDeviceVolumeSlider.Value = value;
+        }
+
+        public double SecondaryVolume
+        {
+            get => SecondaryDeviceVolumeSlider.Value;
+            set => SecondaryDeviceVolumeSlider.Value = value;
+        }
+
+        public bool HaveChangesBeenMade { get; set; }
+
+        public string SaveFilePath { get; set; }
+
+        public Keys StopAllKey = Keys.Decimal;
+
+        public Key StopSingleKey = Key.NumPad0;
+    }
 }

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -95,7 +91,7 @@ namespace Numboard
 			if (!handled)
 			{
 				if (msg.message == HotKeyWinApi.WmHotKey
-					&& (int)(msg.wParam) == _id)
+					&& (int)msg.wParam == _id)
 				{
 					OnHotKeyPressed();
 					handled = true;

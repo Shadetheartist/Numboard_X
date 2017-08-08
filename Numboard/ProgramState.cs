@@ -8,7 +8,8 @@ namespace Numboard
 	public sealed class ProgramState
 	{
 		private static readonly Lazy<ProgramState> lazy = new Lazy<ProgramState>(() => new ProgramState());
-		public static ProgramState Instance { get { return lazy.Value; } }
+		public static ProgramState Instance => lazy.Value;
+
 		private ProgramState()
 		{
 		}
@@ -42,10 +43,7 @@ namespace Numboard
 			using (var reader = new StreamReader(path))
 			{
 				var loadedProgramState = JsonConvert.DeserializeObject<ProgramState>(reader.ReadToEnd());
-				if (loadedProgramState != null)
-				{
-					Helpers.CopyProperties(loadedProgramState, Instance);
-				}
+				loadedProgramState?.CopyProperties(Instance);
 			}
 		}
 	}

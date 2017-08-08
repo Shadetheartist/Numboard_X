@@ -1,22 +1,13 @@
-﻿using Microsoft.Win32;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace Numboard
 {
@@ -78,15 +69,15 @@ namespace Numboard
 		{
 			if (depObj != null)
 			{
-				for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+				for (var i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
 				{
-					DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+					var child = VisualTreeHelper.GetChild(depObj, i);
 					if (child != null && child is T)
 					{
 						yield return (T)child;
 					}
 
-					foreach (T childOfChild in FindVisualChildren<T>(child))
+					foreach (var childOfChild in FindVisualChildren<T>(child))
 					{
 						yield return childOfChild;
 					}
@@ -154,7 +145,7 @@ namespace Numboard
 			}
 
 
-			string lastFile = ProgramState.Instance.DefaultSaveFile;
+			var lastFile = ProgramState.Instance.DefaultSaveFile;
 			if (lastFile != null)
 			{
 				if (!File.Exists(lastFile))
@@ -162,9 +153,9 @@ namespace Numboard
 					return;
 				}
 
-				StreamReader saveFile = new StreamReader(lastFile);
-				JsonTextReader reader = new JsonTextReader(saveFile);
-				object parsedData = new JsonSerializer().Deserialize(reader);
+				var saveFile = new StreamReader(lastFile);
+				var reader = new JsonTextReader(saveFile);
+				var parsedData = new JsonSerializer().Deserialize(reader);
 				var saveData = JsonConvert.DeserializeObject<List<SaveData>>((string)parsedData);
 				ApplySaveData(saveData);
 				SaveFilePath = lastFile;
@@ -179,8 +170,8 @@ namespace Numboard
 				return;
 			}
 
-			int primary = SelectedPrimaryOutputDevice;
-			int secondary = SelectedSecondaryOutputDevice;
+			var primary = SelectedPrimaryOutputDevice;
+			var secondary = SelectedSecondaryOutputDevice;
 
 			PrimaryOutputDevice.Items.Clear();
 			SecondaryOutputDevice.Items.Clear();
@@ -189,12 +180,12 @@ namespace Numboard
 
 			foreach (ValueMenuItem item in PrimaryOutputDevice.Items)
 			{
-				item.IsChecked = ((int)item.Value == primary);
+				item.IsChecked = (int)item.Value == primary;
 			}
 
 			foreach (ValueMenuItem item in SecondaryOutputDevice.Items)
 			{
-				item.IsChecked = ((int)item.Value == secondary);
+				item.IsChecked = (int)item.Value == secondary;
 			}
 
 		}
@@ -214,7 +205,7 @@ namespace Numboard
 			tempValueMenuItem.IsCheckable = true;
 			SecondaryOutputDevice.Items.Add(tempValueMenuItem);
 
-			for (int deviceNumber = 0; deviceNumber < WaveOut.DeviceCount; deviceNumber++)
+			for (var deviceNumber = 0; deviceNumber < WaveOut.DeviceCount; deviceNumber++)
 			{
 				var capabilities = WaveOut.GetCapabilities(deviceNumber);
 
@@ -291,7 +282,7 @@ namespace Numboard
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 			{
-				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 				foreach (var file in files)
 				{
 					if (new FileInfo(file).Extension == ".nbs")
