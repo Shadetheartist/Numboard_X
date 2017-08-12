@@ -1,8 +1,9 @@
 # Numboard_X : The Number Pad Soundboard
+[![Release](https://img.shields.io/github/release/Shadetheartist/Numboard_X.svg?label=Release&maxAge=60)](https://github.com/Shadetheartist/Numboard_X/releases/latest)
+
+[![Screenshot](http://i.imgur.com/c6HvES4.png)](https://github.com/Shadetheartist/Numboard_X/releases/latest)
 
 This soundboard is designed for *maximum simplicity*. The GUI maps directly to the numpad. Audio files are be assigned to the buttons via drag-and-drop. 
-
-![Numboard](http://i.imgur.com/c6HvES4.png)
 
 ## Features
 - Drag & Drop
