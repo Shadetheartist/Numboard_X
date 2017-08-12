@@ -1,12 +1,6 @@
-# Numboard_X : The Number Pad Soundboard
-
-![Blank Numboard](http://i.imgur.com/c6HvES4.png)
-
 This soundboard is designed for *maximum simplicity*. The GUI maps directly to the numpad. Audio files are be assigned to the buttons via drag-and-drop. 
 
-To simplify the common usage of virtual audio cables there are two selectable output devices, 
-one can route to your speakers/headphones, and the other can route to a the output of an audio repeater. 
-Other software (such as "EXP Soundboard") requires *two* audio repeaters in order to function properly. 
+![Numboard](http://i.imgur.com/c6HvES4.png)
 
 # Features
 - Drag & Drop
@@ -33,6 +27,11 @@ Other software (such as "EXP Soundboard") requires *two* audio repeaters in orde
 - Virtual Audio Cables (only necessary if trying to get a the soundboard to play through a game or skype / discord properly)
 
 # Gaming Setup
+
+To simplify the common usage of virtual audio cables there are two selectable output devices, 
+one can route to your speakers/headphones, and the other can route to a the output of an audio repeater. 
+Other software (such as "EXP Soundboard") requires *two* audio repeaters in order to function properly. 
+
 - Virtual Audio Cables setup with at least 1 line out (`Line 1`)
 - An audio repeater from <your microphone> to `Line 1 In`
 - Assign 'Primary Output Device' to your speakers/headphones
